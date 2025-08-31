@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY SEM SCORE – SGPA Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    th, td { padding: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-all duration-300">
+  <!-- Navbar -->
+  <nav class="bg-white dark:bg-gray-800 shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
+    <h1 class="text-2xl font-bold">📊 MY SEM SCORE</h1>
+    <button id="toggleDark" class="bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">🌙 Toggle Mode</button>
+  </nav>
+
+  <div class="space-x-4 px-6 py-4">
+    <a href="#trackerArea" class="hover:underline text-blue-600 font-semibold">Home</a>
+    <a href="#download" class="hover:underline text-blue-600 font-semibold">Download</a>
+    <a href="#aboutus" class="hover:underline text-blue-600 font-semibold">About Us</a>
+  </div>
+
+  <!-- Main Section -->
+  <main class="p-6 max-w-5xl mx-auto" id="trackerArea">
+    <section class="text-center my-8">
+      <h2 class="text-3xl font-bold mb-2">SGPA Tracker</h2>
+      <p class="text-gray-600 dark:text-gray-400">Track and compare your semester performance easily</p>
+    </section>
+
+    <!-- Input Section -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md mb-8">
+      <div class="grid md:grid-cols-3 gap-4 mb-4">
+        <input type="text" id="subject" placeholder="Subject Name" class="p-2 rounded bg-gray-100 dark:bg-gray-700 w-full" />
+        <input type="number" id="credits" min="1" placeholder="Credits" class="p-2 rounded bg-gray-100 dark:bg-gray-700 w-full" />
+        <select id="grade" class="p-2 rounded bg-gray-100 dark:bg-gray-700 w-full">
+          <option value="">Select Grade</option>
+          <option value="S">S</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="AB">AB</option>
+        </select>
+      </div>
+      <div class="flex gap-4">
+        <button onclick="addData()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">➕ Add</button>
+        <button onclick="downloadPDF()" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded" id="download">📥 Download as PDF</button>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="overflow-x-auto mb-6">
+      <table id="dataTable" class="w-full text-left border-collapse bg-white dark:bg-gray-800 rounded-xl overflow-hidden">
+        <thead class="bg-gray-200 dark:bg-gray-700">
+          <tr>
+            <th>Subject Name</th>
+            <th>Credits</th>
+            <th>Grade</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- CGPA Result -->
+    <div id="cgpaResult" class="text-center font-semibold text-lg mb-6">
+      Total Credits: 0 | SGPA: 0.00
+    </div>
+
+    <!-- Grade Table -->
+    <h2 class="text-xl text-center font-bold mb-2">Letter Grades and Their Meaning</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full border border-gray-400 text-sm text-left bg-white dark:bg-gray-800">
+        <thead class="bg-gray-300 dark:bg-gray-700">
+          <tr>
+            <th>Range of %</th>
+            <th>Grade</th>
+            <th>Grade Point</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>≥ 90</td><td>S</td><td>10</td><td>Superior</td></tr>
+          <tr><td>80 to &lt; 90</td><td>A</td><td>9</td><td>Excellent</td></tr>
+          <tr><td>70 to &lt; 80</td><td>B</td><td>8</td><td>Very Good</td></tr>
+          <tr><td>60 to &lt; 70</td><td>C</td><td>7</td><td>Good</td></tr>
+          <tr><td>50 to &lt; 60</td><td>D</td><td>6</td><td>Average</td></tr>
+          <tr><td>40 to &lt; 50</td><td>E</td><td>5</td><td>Pass</td></tr>
+          <tr><td>&lt; 40</td><td>F</td><td>0</td><td>Fail</td></tr>
+          <tr><td>--</td><td>AB</td><td>0</td><td>Absent</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- About Us Section -->
+  <section id="aboutus" class="bg-white dark:bg-gray-800 p-6 max-w-5xl mx-auto rounded-xl shadow-md my-10">
+    <h2 class="text-2xl font-bold mb-2 text-center">About Us</h2>
+    <p class="text-center text-gray-700 dark:text-gray-300">
+      <p class="text-lg text-gray-700 leading-relaxed space-y-4">
+      I’m a passionate web developer currently pursuing B.Tech 3rd year in Computer Science<br>
+      This SGPA Tracker helps students calculate and track their semester performance easily. <br>
+      You can enter subjects, credits, and grades to instantly calculate SGPA.<br>
+      It also lets you download your results as a PDF for records.<br>
+      <strong>Designed to simplify your academic progress.</strong>
+    </p>
+
+    <div class="mt-8 border-t pt-4 text-sm text-gray-600">
+      <p class="mb-1">📞 Contact: <strong>8877885563</strong></p>
+      <p>📸 Instagram: 
+        <a href="https://www.instagram.com/student_in_tech" 
+           target="_blank" 
+           class="text-blue-500 hover:underline">@student_in_tech</a>
+      </p>
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+    © 2025 MY SEM SCORE. Made with ❤️ 
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const toggleBtn = document.getElementById('toggleDark');
+    toggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    const gradePoints = { S: 10, A: 9, B: 8, C: 7, D: 6, E: 5, F: 0, AB: 0 };
+    let data = [];
+
+    function addData() {
+      const subject = document.getElementById('subject').value.trim();
+      const credits = parseFloat(document.getElementById('credits').value);
+      const grade = document.getElementById('grade').value;
+
+      if (!subject || isNaN(credits) || !grade) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      data.push({ subject, credits, grade });
+      document.getElementById('subject').value = '';
+      document.getElementById('credits').value = '';
+      document.getElementById('grade').value = '';
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector('#dataTable tbody');
+      tbody.innerHTML = '';
+
+      let totalCredits = 0;
+      let totalPoints = 0;
+
+      data.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.subject}</td>
+          <td>${item.credits}</td>
+          <td>${item.grade}</td>
+          <td>
+            <button onclick="editData(${index})" class="text-blue-500 hover:underline">Edit</button>
+            <button onclick="deleteData(${index})" class="text-red-500 hover:underline ml-2">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        totalCredits += item.credits;
+        totalPoints += gradePoints[item.grade] * item.credits;
+      });
+
+      const cgpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+      document.getElementById('cgpaResult').textContent = `Total Credits: ${totalCredits} | SGPA: ${cgpa}`;
+    }
+
+    function deleteData(index) {
+      data.splice(index, 1);
+      renderTable();
+    }
+
+    function editData(index) {
+      const item = data[index];
+      document.getElementById('subject').value = item.subject;
+      document.getElementById('credits').value = item.credits;
+      document.getElementById('grade').value = item.grade;
+      data.splice(index, 1);
+      renderTable();
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('trackerArea');
+      const opt = {
+        margin: 0.5,
+        filename: 'MY_SEM_SCORE_Report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+</body>
+</html>
