@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CGPA Calculator – MY SEM SCORE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' } }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    .dark .glass { background: rgba(31, 41, 55, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="fixed w-full z-50 glass shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 flex items-center">
+          <a href="index.html" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-indigo-600 dark:from-brand-400 dark:to-indigo-400">
+            📊 MY SEM SCORE
+          </a>
+        </div>
+        <div class="hidden md:flex space-x-8 items-center">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">Home</a>
+          <a href="sgpa.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">SGPA</a>
+          <a href="cgpa.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">CGPA</a>
+          <a href="percentage.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">Percentage</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">About</a>
+          <button id="themeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition ml-4">
+            <svg id="themeIconDark" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="themeIconLight" class="hidden w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 1.336a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zm-1.336 4.22a1 1 0 010 1.415l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.336a1 1 0 010-1.415l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 01-1.414 1.414zM4 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1zm1.336-4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 5a5 5 0 100 10 5 5 0 000-10z" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+        <div class="md:hidden flex items-center gap-4">
+          <button id="themeToggleMobile" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800" onclick="document.getElementById('themeToggle').click()">🌓</button>
+          <button id="mobileMenuBtn" class="p-2 text-gray-600 dark:text-gray-300">
+             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+      <div class="px-4 pt-2 pb-4 space-y-1">
+        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">Home</a>
+        <a href="sgpa.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">SGPA Calculator</a>
+        <a href="cgpa.html" class="block px-3 py-2 rounded-md text-base font-medium text-brand-600 dark:text-brand-400">CGPA Calculator</a>
+        <a href="percentage.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">Percentage Converter</a>
+        <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold">CGPA Calculator</h2>
+      <p class="text-gray-500 mt-2">Calculate your overall CGPA across multiple semesters dynamically.</p>
+    </div>
+
+    <div class="glass rounded-2xl p-6 md:p-8 shadow-sm">
+      <div class="max-w-xl mx-auto text-center mb-8">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Number of Semesters Completed</label>
+        <div class="flex justify-center items-center gap-3">
+          <input type="number" id="cgpa-sem-count" min="1" max="10" value="2" class="w-24 text-center p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-brand-500 outline-none transition" />
+          <button onclick="generateSemesterInputs()" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-lg font-medium transition shadow">Generate Fields</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8" id="cgpa-inputs-container">
+        <!-- Dynamic inputs will appear here -->
+      </div>
+
+      <div class="flex justify-center gap-4 mb-8">
+        <button onclick="calculateCgpa()" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-bold text-lg transition shadow-lg transform hover:-translate-y-0.5">Calculate CGPA</button>
+        <button onclick="resetCgpa()" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-8 py-3 rounded-xl font-bold text-lg transition shadow">Reset</button>
+      </div>
+
+      <!-- Result Section -->
+      <div id="cgpa-results-container" class="hidden">
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 text-center shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-brand-500"></div>
+            <p class="text-gray-500 dark:text-gray-400 font-medium mb-1">Overall CGPA</p>
+            <p class="text-5xl font-extrabold text-brand-600 dark:text-brand-400" id="final-cgpa">0.00</p>
+          </div>
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 text-center shadow-sm relative overflow-hidden flex flex-col justify-center">
+             <div class="absolute top-0 left-0 w-full h-1 bg-indigo-500"></div>
+             <p class="text-gray-500 dark:text-gray-400 font-medium mb-1">Action</p>
+             <button onclick="copyCgpa()" class="mt-2 mx-auto bg-brand-50 hover:bg-brand-100 dark:bg-gray-700 dark:hover:bg-gray-600 text-brand-700 dark:text-brand-300 px-6 py-2 rounded-lg font-medium transition">📋 Copy Result</button>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
+           <h3 class="font-bold text-lg p-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">Semester-wise Summary</h3>
+           <div class="overflow-x-auto">
+             <table class="w-full text-left text-sm">
+               <thead class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                 <tr>
+                   <th class="p-4">Semester</th>
+                   <th class="p-4">SGPA</th>
+                 </tr>
+               </thead>
+               <tbody id="cgpa-summary-tbody" class="divide-y divide-gray-200 dark:divide-gray-700">
+                 <!-- Summary generated here -->
+               </tbody>
+             </table>
+           </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-8 text-center text-sm text-gray-500 dark:text-gray-400 mt-auto">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>© 2025 MY SEM SCORE. Made with ❤️.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    function generateSemesterInputs() {
+      const count = parseInt(document.getElementById('cgpa-sem-count').value);
+      const container = document.getElementById('cgpa-inputs-container');
+      container.innerHTML = '';
+      document.getElementById('cgpa-results-container').classList.add('hidden');
+
+      if (isNaN(count) || count < 1 || count > 10) {
+        showToast("Please enter a valid number of semesters (1-10).", "error");
+        return;
+      }
+
+      for (let i = 1; i <= count; i++) {
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester ${i} SGPA</label>
+          <input type="number" step="0.01" min="0" max="10" id="sem-${i}-sgpa" placeholder="e.g. 8.5" class="w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-brand-500 outline-none transition cgpa-input" />
+        `;
+        container.appendChild(div);
+      }
+      showToast("Fields generated!", "success");
+    }
+
+    function calculateCgpa() {
+      const inputs = document.querySelectorAll('.cgpa-input');
+      if (inputs.length === 0) {
+        showToast("Please generate semester fields first.", "error");
+        return;
+      }
+
+      let totalSgpa = 0;
+      let validSemesters = 0;
+      const summaryBody = document.getElementById('cgpa-summary-tbody');
+      summaryBody.innerHTML = '';
+
+      for (let i = 0; i < inputs.length; i++) {
+        const val = parseFloat(inputs[i].value);
+        if (isNaN(val) || val < 0 || val > 10) {
+          showToast(`Please enter a valid SGPA (0 - 10) for Semester ${i+1}.`, "error");
+          return;
+        }
+        totalSgpa += val;
+        validSemesters++;
+
+        // Add to summary
+        summaryBody.innerHTML += `
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+            <td class="p-4 font-medium">Semester ${i+1}</td>
+            <td class="p-4 font-bold text-brand-600 dark:text-brand-400">${val.toFixed(2)}</td>
+          </tr>
+        `;
+      }
+
+      const cgpa = (totalSgpa / validSemesters).toFixed(2);
+      document.getElementById('final-cgpa').textContent = cgpa;
+      
+      document.getElementById('cgpa-results-container').classList.remove('hidden');
+      showToast("CGPA Calculated!", "success");
+    }
+
+    function resetCgpa() {
+      document.getElementById('cgpa-inputs-container').innerHTML = '';
+      document.getElementById('cgpa-results-container').classList.add('hidden');
+      document.getElementById('cgpa-sem-count').value = 2;
+      generateSemesterInputs();
+      showToast("Reset successful", "success");
+    }
+
+    function copyCgpa() {
+      const cgpa = document.getElementById('final-cgpa').textContent;
+      const inputs = document.querySelectorAll('.cgpa-input');
+      let text = `My Overall CGPA: ${cgpa}\n\n`;
+      inputs.forEach((input, index) => {
+        text += `Semester ${index+1}: ${input.value}\n`;
+      });
+      text += `\nCalculated via MY SEM SCORE!`;
+      copyToClipboard(text);
+    }
+
+    // Initialize
+    generateSemesterInputs();
+  </script>
+</body>
+</html>

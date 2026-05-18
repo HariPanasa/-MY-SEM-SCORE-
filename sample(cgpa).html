@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MY SEM SCORE – SGPA Tracker</title>
+  <link rel="stylesheet" href="style.css">
+ <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    select, input {
+      padding: 8px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 8px 16px;
+      margin: 5px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .controls {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="trackerArea">
+    <h1>MY SEM SCORE – SGPA Tracker</h1>
+
+    <label>Subject Name: <input type="text" id="subject"></label>
+    <label>Credits: <input type="number" id="credits" min="1"></label>
+    <label>Grade:
+      <select id="grade">
+        <option value="">Select Grade</option>
+        <option value="S">S</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="AB">AB</option>
+      </select>
+    </label>
+    <button onclick="addData()">Add</button>
+    <button onclick="downloadPDF()">Download as PDF</button>
+
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>Subject Name</th>
+          <th>Credits</th>
+          <th>Grade</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="summary" id="cgpaResult">Total Credits: 0 | CGPA: 0.00</div>
+
+    <h2 style="text-align: center;">Letter Grades and Its Connotation</h2>
+    <div class="centered">
+      <table id="gradeTable">
+        <thead>
+          <tr>
+            <th>Range of % of Marks</th>
+            <th>Grade</th>
+            <th>Grade Point</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>≥ 90</td><td>S</td><td>10</td><td>Superior</td></tr>
+          <tr><td>80 to &lt; 90</td><td>A</td><td>9</td><td>Excellent</td></tr>
+          <tr><td>70 to &lt; 80</td><td>B</td><td>8</td><td>Very Good</td></tr>
+          <tr><td>60 to &lt; 70</td><td>C</td><td>7</td><td>Good</td></tr>
+          <tr><td>50 to &lt; 60</td><td>D</td><td>6</td><td>Average</td></tr>
+          <tr><td>40 to &lt; 50</td><td>E</td><td>5</td><td>Pass</td></tr>
+          <tr><td>&lt; 40</td><td>F</td><td>0</td><td>Fail</td></tr>
+          <tr><td>--</td><td>AB</td><td>0</td><td>Absent</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    const gradePoints = { S: 10, A: 9, B: 8, C: 7, D: 6, E: 5, F: 0, AB: 0 };
+    let data = [];
+
+    function addData() {
+      const subject = document.getElementById('subject').value.trim();
+      const credits = parseFloat(document.getElementById('credits').value);
+      const grade = document.getElementById('grade').value;
+
+      if (!subject || isNaN(credits) || !grade) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      data.push({ subject, credits, grade });
+      document.getElementById('subject').value = '';
+      document.getElementById('credits').value = '';
+      document.getElementById('grade').value = '';
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector('#dataTable tbody');
+      tbody.innerHTML = '';
+
+      let totalCredits = 0;
+      let totalPoints = 0;
+
+      data.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.subject}</td>
+          <td>${item.credits}</td>
+          <td>${item.grade}</td>
+          <td class="actions">
+            <button onclick="editData(${index})">Edit</button>
+            <button onclick="deleteData(${index})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        totalCredits += item.credits;
+        totalPoints += gradePoints[item.grade] * item.credits;
+      });
+
+      const cgpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+      document.getElementById('cgpaResult').textContent = `Total Credits: ${totalCredits} | CGPA: ${cgpa}`;
+    }
+
+    function deleteData(index) {
+      data.splice(index, 1);
+      renderTable();
+    }
+
+    function editData(index) {
+      const item = data[index];
+      document.getElementById('subject').value = item.subject;
+      document.getElementById('credits').value = item.credits;
+      document.getElementById('grade').value = item.grade;
+      data.splice(index, 1);
+      renderTable();
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('trackerArea');
+      const opt = {
+        margin: 0.5,
+        filename: 'MY_SEM_SCORE_Report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+</body>
+</html>

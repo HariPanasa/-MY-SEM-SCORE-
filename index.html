@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY SEM SCORE – Academic Calculator Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    .dark .glass { background: rgba(31, 41, 55, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="fixed w-full z-50 glass shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 flex items-center">
+          <a href="index.html" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-indigo-600 dark:from-brand-400 dark:to-indigo-400">
+            📊 MY SEM SCORE
+          </a>
+        </div>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex space-x-8 items-center">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">Home</a>
+          <a href="sgpa.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">SGPA</a>
+          <a href="cgpa.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">CGPA</a>
+          <a href="percentage.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">Percentage</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400 font-medium transition">About</a>
+          
+          <button id="themeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition ml-4">
+            <svg id="themeIconDark" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="themeIconLight" class="hidden w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 1.336a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zm-1.336 4.22a1 1 0 010 1.415l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.336a1 1 0 010-1.415l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 01-1.414 1.414zM4 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1zm1.336-4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 5a5 5 0 100 10 5 5 0 000-10z" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+
+        <!-- Mobile Nav Button -->
+        <div class="md:hidden flex items-center gap-4">
+          <button id="themeToggleMobile" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800" onclick="document.getElementById('themeToggle').click()">
+            🌓
+          </button>
+          <button id="mobileMenuBtn" class="p-2 text-gray-600 dark:text-gray-300">
+             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+      <div class="px-4 pt-2 pb-4 space-y-1">
+        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-brand-600 dark:text-brand-400">Home</a>
+        <a href="sgpa.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">SGPA Calculator</a>
+        <a href="cgpa.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">CGPA Calculator</a>
+        <a href="percentage.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">Percentage Converter</a>
+        <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-brand-600 dark:hover:text-brand-400">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Wrapper -->
+  <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    
+    <!-- Hero Section -->
+    <section class="py-12 text-center">
+      <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-700 dark:text-brand-300 font-semibold text-sm">
+        Your complete academic toolkit 🎓
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+        Calculate Your Academic Success <br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-600 dark:from-brand-400 dark:to-indigo-400">
+          Faster & Smarter
+        </span>
+      </h1>
+      <p class="mt-4 text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-10">
+        Track your SGPAs, calculate your overall CGPA, and instantly convert it to a percentage. All in one modern, easy-to-use platform.
+      </p>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="grid md:grid-cols-3 gap-8">
+      <!-- SGPA Card -->
+      <a href="sgpa.html" class="group glass rounded-2xl p-8 hover:-translate-y-2 transition-all duration-300 shadow-sm hover:shadow-xl text-center block border border-gray-200 dark:border-gray-700">
+        <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mb-6 text-3xl">
+          📝
+        </div>
+        <h3 class="text-2xl font-bold mb-3 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition">SGPA Calculator</h3>
+        <p class="text-gray-500 dark:text-gray-400">Calculate your Semester Grade Point Average by entering subjects, credits, and grades.</p>
+      </a>
+
+      <!-- CGPA Card -->
+      <a href="cgpa.html" class="group glass rounded-2xl p-8 hover:-translate-y-2 transition-all duration-300 shadow-sm hover:shadow-xl text-center block border border-gray-200 dark:border-gray-700">
+        <div class="w-16 h-16 mx-auto bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-6 text-3xl">
+          📈
+        </div>
+        <h3 class="text-2xl font-bold mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">CGPA Calculator</h3>
+        <p class="text-gray-500 dark:text-gray-400">Calculate your Cumulative Grade Point Average across multiple semesters dynamically.</p>
+      </a>
+
+      <!-- Percentage Card -->
+      <a href="percentage.html" class="group glass rounded-2xl p-8 hover:-translate-y-2 transition-all duration-300 shadow-sm hover:shadow-xl text-center block border border-gray-200 dark:border-gray-700">
+        <div class="w-16 h-16 mx-auto bg-pink-100 dark:bg-pink-900/50 rounded-2xl flex items-center justify-center mb-6 text-3xl">
+          💯
+        </div>
+        <h3 class="text-2xl font-bold mb-3 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition">Percentage Converter</h3>
+        <p class="text-gray-500 dark:text-gray-400">Instantly convert your CGPA or SGPA into a percentage using standard university formulas.</p>
+      </a>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-8 text-center text-sm text-gray-500 dark:text-gray-400 mt-auto">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>© 2025 MY SEM SCORE. Made with ❤️.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
