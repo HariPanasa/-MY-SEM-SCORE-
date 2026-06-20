@@ -44,13 +44,12 @@ To run this project locally, you don't need any complex build tools. A simple lo
 
 *(Add screenshots of your application here. You can drag and drop images directly into your GitHub repository and link them below)*
 
-- **Home Page**  
-  `![Home Page](link-to-image)`
-- **Dashboard**  
-  `![Dashboard](link-to-image)`
+- **Home Page**
+  (https://kommodo.ai/i/vRYNrnAMC2zE29PFZWQX)`
 - **Dark Mode UI**  
-  `![Dark Mode](link-to-image)`
-
+  https://kommodo.ai/i/Nz3ksEeUlm1JrT8YolV5
+- **Dashboard**  
+  (https://kommodo.ai/i/07NZNUbA3MT3NJUFUYRM)
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
